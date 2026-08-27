@@ -156,26 +156,7 @@ bool isPrimeSimple(int n) {
     return true;
 }
 bool checkbinary(vector<ll>&a,ll k,ll mid){
-    ll n=a.size();
-    for(int i=0;i<n;i++){
-        ll rem=k,cur=mid;
-        ll f=0;
-        for(int j=i;j<n;j++){
-            if(a[j]>=cur){
-                f=1;
-                break;
-            }
-            if(j==n-1){
-                break;
-            }
-            rem=rem-abs(cur-a[j]);
-            cur--;
-        }
-        if(f==1&&rem>=0){
-            return true;
-        }
-    }
-    return false;
+
 }
 
 
@@ -184,26 +165,31 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 
 void solve() {
-    ll n,k;
-    cin>>n>>k;
-    vector<ll>a(n);
-    ll maxi=-1;
-    f(i,0,n){
-        cin>>a[i];
-        maxi=max(maxi,a[i]);
-    }   
-    ll st=maxi,end=maxi+k,ans=maxi;
-    while(st<=end){
-        ll mid=(st+end)/2;
-        if(checkbinary(a,k,mid)){
-            ans=mid;
-            st=mid+1;
+    ll n;
+    cin>>n;
+    string s;
+    cin>>s;
+    ll cnt=0;
+    string s1="010";
+    string s2="101";
+    string s3="0101";
+    string s4="1010";
+    ll j=0,k=0,l=0,m=0;
+    for(int i=0;i<n;i++){
+        if(i<n-1){
+            if(s[i]==s[i+1])cnt++;
         }
-        else{
-            end=mid-1;
-        }
+        if(j<3&&s[i]==s1[j])j++;
+        if(k<3&&s[i]==s2[k])k++;
+        if(l<4&&s[i]==s3[l])l++;
+        if(m<4&&s[i]==s4[m])m++;
     }
-    cout<<ans<<endl;
+    ll f=0;
+    if(j==3||k==3){
+        f=1;
+    }
+    if(l==4||m==4)f=2;
+    cout<<cnt+f<<endl;
 }
 
 // ==========================================================================

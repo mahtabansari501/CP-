@@ -156,56 +156,38 @@ bool isPrimeSimple(int n) {
     return true;
 }
 bool checkbinary(vector<ll>&a,ll k,ll mid){
-    ll n=a.size();
-    for(int i=0;i<n;i++){
-        ll rem=k,cur=mid;
-        ll f=0;
-        for(int j=i;j<n;j++){
-            if(a[j]>=cur){
-                f=1;
-                break;
-            }
-            if(j==n-1){
-                break;
-            }
-            rem=rem-abs(cur-a[j]);
-            cur--;
-        }
-        if(f==1&&rem>=0){
-            return true;
-        }
-    }
-    return false;
+
 }
 
 
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
 void solve() {
-    ll n,k;
-    cin>>n>>k;
-    vector<ll>a(n);
-    ll maxi=-1;
-    f(i,0,n){
-        cin>>a[i];
-        maxi=max(maxi,a[i]);
-    }   
-    ll st=maxi,end=maxi+k,ans=maxi;
-    while(st<=end){
-        ll mid=(st+end)/2;
-        if(checkbinary(a,k,mid)){
-            ans=mid;
-            st=mid+1;
-        }
-        else{
-            end=mid-1;
+    ll n;
+    cin >> n;
+    vector<ll> a(n);
+    for (auto &x : a) cin >> x;
+    string s;
+    cin >> s;
+    vector<ll> mx;
+    ll cur = a[0];
+    for (int i = 1; i < n; i++) {
+        if (s[i] == s[i - 1]) {
+            cur = max(cur, a[i]);
+        } else {
+            mx.push_back(cur);
+            cur = a[i];
         }
     }
-    cout<<ans<<endl;
+    mx.push_back(cur);
+    if (s[0] == s[n - 1] && mx.size() > 1) {
+        mx[0] = max(mx[0], mx.back());
+        mx.pop_back();
+    }
+    sort(mx.rbegin(), mx.rend());
+    cout << mx[0] + mx[1] <<endl;
 }
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================

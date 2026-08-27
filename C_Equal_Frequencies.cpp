@@ -163,48 +163,67 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
 void solve() {
     ll n;
     cin>>n;
     string s;
     cin>>s;
-    vector<pair<char,ll>>a;
-    set<char>st;
+    vector<pair<ll,char>>freq(26);
     for(int i=0;i<26;i++){
-        st.insert('a'+i);
+        freq[i]={0,'a'+i};
     }
-    map<ll,ll>mp;
-    for(int i=0;i<n;i++){
-        a.push_back({s[i],i});
-        if(st.find(s[i])!=st.end()){
-            st.erase(s[i]);
-        }
-        mp[s[i]-'a']++;
+    for(char c:s) {
+        freq[c-'a'].first++;
     }
-    sort(a.begin(),a.end());
-    vector<ll>div;
-    for(int i=1;i*i<=n;i++){
-        if(n%i==0){
-            div.push_back(i);
-            div.push_back(n/i);
-        }
-    }
-    ll mini=LLONG_MAX,cnt=-1;
-    for(int i=0;i<div.size();i++){
-        ll cur=0;
-        for(auto it:mp){
-            if(it.second!=div[i]){
-                cur+=abs(div[i]-it.second);
+    auto orig_freq=freq;
+    sort(freq.rbegin(), freq.rend());
+    ll min_ops=n+1;
+    ll best_k=-1;
+    for(int k=1;k<=26;k++){
+        if(n%k==0){
+            ll target_freq=n/k;
+            ll ops=0;
+            for(int i= 0;i<k;i++) {
+                if (freq[i].first<target_freq) {
+                    ops += (target_freq - freq[i].first);
+                }
+            }
+            if(ops<min_ops) {
+                min_ops=ops;
+                best_k=k;
             }
         }
-        if(cur<mini){
-            cnt=div[i];
-            
+    }
+    ll target_freq=n/best_k;
+    vector<ll>target_count(26, 0); 
+    for (int i=0;i<best_k;i++) {
+        target_count[freq[i].second-'a']=target_freq;
+    }
+    vector<char>missing_chars;
+    vector<ll>keep(26,0);
+    for(int i=0;i<26;i++) {
+        ll orig=orig_freq[i].first;
+        ll tgt=target_count[i];
+        keep[i] = min(orig, tgt);
+        for(int j=0;j<max(0LL,tgt-orig);j++) {
+            missing_chars.push_back('a'+i);
         }
     }
+    string ans_str="";
+    ll miss_idx=0;
+    for(char c:s){
+        ll idx=c-'a';
+        if(keep[idx]>0){
+            ans_str+=c;
+            keep[idx]--;
+        } else {
+            ans_str+=missing_chars[miss_idx];
+            miss_idx++;
+        }
+    }
+    cout<<min_ops<<endl;
+    cout<<ans_str<<endl;
 }
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================

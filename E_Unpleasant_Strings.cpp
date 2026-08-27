@@ -156,65 +156,71 @@ bool isPrimeSimple(int n) {
     return true;
 }
 bool checkbinary(vector<ll>&a,ll k,ll mid){
-    ll n=a.size();
-    for(int i=0;i<n;i++){
-        ll rem=k,cur=mid;
-        ll f=0;
-        for(int j=i;j<n;j++){
-            if(a[j]>=cur){
-                f=1;
-                break;
-            }
-            if(j==n-1){
-                break;
-            }
-            rem=rem-abs(cur-a[j]);
-            cur--;
-        }
-        if(f==1&&rem>=0){
-            return true;
-        }
-    }
-    return false;
+
 }
 
 
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
 void solve() {
     ll n,k;
     cin>>n>>k;
-    vector<ll>a(n);
-    ll maxi=-1;
-    f(i,0,n){
-        cin>>a[i];
-        maxi=max(maxi,a[i]);
-    }   
-    ll st=maxi,end=maxi+k,ans=maxi;
-    while(st<=end){
-        ll mid=(st+end)/2;
-        if(checkbinary(a,k,mid)){
-            ans=mid;
-            st=mid+1;
+    string s;
+    cin>>s;
+    vector<vector<ll>>occ(k);
+    for(int i=0;i<n;i++){
+        occ[s[i]-'a'].push_back(i);
+    }
+    vector<ll>first(n+1,0);
+    first[n]=1;
+    vector<ll>pos(k,n);
+    for(int i=n-1;i>=0;i--){
+        pos[s[i]-'a']=i;
+        ll mini=1e9;
+        for(int j=0;j<k;j++){
+            if(pos[j]==n){
+                mini=min(mini,1LL);
+            }
+            else{
+                mini=min(mini,1+first[pos[j]+1]);
+            }
         }
-        else{
-            end=mid-1;
+        first[i]=mini;
+    }
+    ll q;
+    cin>>q;
+    while(q--){
+        string t;
+        cin>>t;
+        ll cur=0;
+        ll f=1;
+        for(char c:t){
+            ll ch=c-'a';
+            auto it=lower_bound(occ[ch].begin(),occ[ch].end(),cur);
+            if(it==occ[ch].end()){
+                f=0;
+                break;
+            }
+            cur=*it+1;
+        }
+        if(f==0){
+            cout<<f<<endl;
+        }
+        else {
+            cout<<first[cur]<<endl;
         }
     }
-    cout<<ans<<endl;
 }
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================
 
 int main() {
     fastio();
-    //ll t=1;
-    ll t;
-    cin >> t;
+    ll t=1;
+    //ll t;
+    //cin >> t;
     while (t--) {
         solve();
     }

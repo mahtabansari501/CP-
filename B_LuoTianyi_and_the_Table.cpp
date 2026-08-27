@@ -156,26 +156,7 @@ bool isPrimeSimple(int n) {
     return true;
 }
 bool checkbinary(vector<ll>&a,ll k,ll mid){
-    ll n=a.size();
-    for(int i=0;i<n;i++){
-        ll rem=k,cur=mid;
-        ll f=0;
-        for(int j=i;j<n;j++){
-            if(a[j]>=cur){
-                f=1;
-                break;
-            }
-            if(j==n-1){
-                break;
-            }
-            rem=rem-abs(cur-a[j]);
-            cur--;
-        }
-        if(f==1&&rem>=0){
-            return true;
-        }
-    }
-    return false;
+
 }
 
 
@@ -184,26 +165,17 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 
 void solve() {
-    ll n,k;
-    cin>>n>>k;
-    vector<ll>a(n);
-    ll maxi=-1;
-    f(i,0,n){
+    ll n,m;
+    cin>>n>>m;
+    vector<ll>a(n*m);
+    f(i,0,n*m){
         cin>>a[i];
-        maxi=max(maxi,a[i]);
-    }   
-    ll st=maxi,end=maxi+k,ans=maxi;
-    while(st<=end){
-        ll mid=(st+end)/2;
-        if(checkbinary(a,k,mid)){
-            ans=mid;
-            st=mid+1;
-        }
-        else{
-            end=mid-1;
-        }
     }
-    cout<<ans<<endl;
+    ll l=n*m;
+    sort(a.begin(),a.end());
+    ll ans=((a[l-1]-a[0])*(n*m-min(n,m)))+((min(n,m)-1)*(a[l-2]-a[0]));
+    ll ans1=((a[l-1]-a[0])*(n*m-min(n,m)))+((min(n,m)-1)*(a[l-1]-a[1]));
+     cout<<max(ans1,ans)<<endl;
 }
 
 // ==========================================================================
