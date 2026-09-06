@@ -158,25 +158,59 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
-
-
-// ==========================================================================
-// ============================  SOLVE  =====================================
-// ==========================================================================
-
+bool rec(ll n, ll idx, ll cnt, ll len, vector<ll>& a,ll f1,ll f2,vector<int>& dp) {
+    if(idx==n){
+        if(cnt==len)return 1;
+        return 0;
+    }
+    if(f1==1&&f2==1) {
+        if(cnt!=len)return 0;
+        f1=0;
+        f2=0;
+    }
+    if(f1==0&&f2==0){
+        if(dp[idx]!=-1)return dp[idx];
+    }
+    if(f1==0&&f2==1){
+        if(idx+(len-cnt)>n)return 0;
+    }
+    ll case1=0,case2=0,case3=0,case4=0,case5=0,case6=0;
+    if(f1==0&&f2==0){
+        case1=rec(n,idx+1,1,0,a,1,0,dp);
+        if(idx+a[idx]<=n){
+            case2=rec(n,idx+1,0,a[idx],a,0,1,dp);
+        }
+    }
+    else if(f1==0){
+        if(cnt+1<len) {
+            case3=rec(n,idx+1,cnt+1,len,a,0,1,dp);
+        }else if(cnt+1==len) {
+            case4=rec(n,idx+1,cnt+1,len,a,1,1,dp);
+        }
+    }
+    else if(f2==0){ 
+        case5=rec(n,idx+1,cnt+1,0,a,1,0,dp);
+        if(cnt==a[idx]) {
+            case6=rec(n,idx+1,cnt,a[idx],a,1,1,dp);
+        }
+    }
+    bool ans=case1||case2||case3||case4||case5||case6;
+    if(f1==0&&f2==0) {
+        dp[idx]=ans;
+    }
+    return ans;
+}
 void solve() {
     ll n;
     cin>>n;
     vector<ll>a(n);
-    ll f=0;
     f(i,0,n){
         cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
-        }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    vector<int>dp(n+1,-1);
+    bool ans=rec(n,0,0,0,a,0,0,dp);
+    if(ans)cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
 }
 
 // ==========================================================================

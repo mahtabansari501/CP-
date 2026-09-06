@@ -167,16 +167,15 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 void solve() {
     ll n;
     cin>>n;
-    vector<ll>a(n);
-    ll f=0;
-    f(i,0,n){
-        cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
-        }
+    ll m=n;
+    while((m%3)!=1){
+        m+=1;
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    cout<<m<<endl;
+    
+
+
+
 }
 
 // ==========================================================================

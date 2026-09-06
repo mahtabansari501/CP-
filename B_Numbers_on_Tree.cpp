@@ -163,20 +163,62 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
+vector<vector<ll>>adj;
+vector<ll>c;
+vector<ll>ans;
+ll f=1;
+vector<ll>dfs(ll node){
+    vector<ll>v;
+    for(auto child:adj[node]){
+        vector<ll>temp=dfs(child);
+        for(auto x:temp){
+            v.push_back(x);
+        }
+    }
+    if(c[node]>v.size()){
+        f=0;
+        return {};
+    }
+    vector<ll>temp;
+    for(int i=0;i<c[node];i++){
+        temp.push_back(v[i]);
+    }
+    temp.push_back(node);
+    for(int i=c[node];i<v.size();i++){
+        temp.push_back(v[i]);
+    }
+    v=temp;
+    return v;
+}
 void solve() {
     ll n;
     cin>>n;
-    vector<ll>a(n);
-    ll f=0;
-    f(i,0,n){
-        cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
+    adj.resize(n+1);
+    c.resize(n+1);
+    ans.resize(n+1);
+    ll root=-1;
+    for(int i=1;i<=n;i++){
+        ll x,y;
+        cin>>x>>c[i];
+        if(x==0){
+            root=i;
         }
+        else adj[x].push_back(i);
+
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    vector<ll>order=dfs(root);
+    if(!f){
+        cout<<"NO"<<endl;
+        return;
+    }
+    cout<<"YES"<<endl;
+    for(int i=0;i<n;i++){
+        ans[order[i]]=i+1;
+    }
+    for(int i=1;i<=n;i++){
+        cout<<ans[i]<<" ";
+    }
+    cout<<endl;
 }
 
 // ==========================================================================
@@ -185,9 +227,9 @@ void solve() {
 
 int main() {
     fastio();
-    //ll t=1;
-    ll t;
-    cin >> t;
+    ll t=1;
+    //ll t;
+    //cin >> t;
     while (t--) {
         solve();
     }

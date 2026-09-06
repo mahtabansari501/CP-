@@ -168,15 +168,31 @@ void solve() {
     ll n;
     cin>>n;
     vector<ll>a(n);
-    ll f=0;
     f(i,0,n){
         cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
+    }
+    ll st=0,end=n;
+    for(int i=0;i<n;i++){
+        if(a[i]==1||a[i]==-1){
+            st=i+1;
+            a[i]=1;
+            break;
         }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    for(int i=n-1;i>=0;i--){
+        if(a[i]==1||a[i]==-1){
+            end=i;
+            a[i]=1;
+            break;
+        }
+    }
+    for(int i=st;i<end;i++){
+        if(a[i]==-1)a[i]=0;
+    }
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
 }
 
 // ==========================================================================

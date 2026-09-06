@@ -163,22 +163,65 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
 void solve() {
     ll n;
-    cin>>n;
-    vector<ll>a(n);
+    cin>>n;    
+    vector<ll>b(n);
+    for(int i=0;i<n;i++){
+        cin>>b[i];
+    }
+    vector<ll>diff(n+1,0);
+    for(int i=0;i<n;i++) {
+        if(b[i]>0) {
+            ll L=max(0LL,i-b[i]+1);
+            ll R=min(n-1,i+b[i]-1);
+            if(L<=R){
+                diff[L]++;
+                diff[R+1]--;
+            }
+        }
+    }    
+    vector<bool>t(n,false);
+    ll curr=0;
     ll f=0;
-    f(i,0,n){
-        cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
+    for(int i=0;i<n;i++) {
+        curr+=diff[i];
+        if(curr == 0) {
+            t[i] = true;
+            f=true;
         }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    if(!f){
+        cout<<"-1"<<endl;
+        return;
+    }    
+    bool possible=true;
+    for(int i=0;i<n;i++) {
+        if(b[i]!=-1) {
+            bool ok=false;
+            if(i-b[i]>=0&&t[i-b[i]]) {
+                ok=true;
+            }
+            if (i+b[i]<n&&t[i + b[i]]) {
+                ok=true;
+            }
+            if (!ok) {
+                possible = false;
+                break;
+            }
+        }
+    } 
+    if(!possible){
+        cout<<"-1"<<endl;
+    } 
+    else{
+        string ans= "";
+        for(int i=0;i<n;i++) {
+            ans+= (t[i] ? '1' : '0');
+        }
+        cout <<ans<<endl;
+    }
 }
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================

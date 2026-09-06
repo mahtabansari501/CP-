@@ -168,15 +168,21 @@ void solve() {
     ll n;
     cin>>n;
     vector<ll>a(n);
-    ll f=0;
+    ll cnt0=0,cnt1=0,cnt2=0;
     f(i,0,n){
         cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
+        if(a[i]%2){
+            cnt1++;
+        }
+        else{
+            if((a[i]/2)%2){
+                cnt0++;
+            }
+            else cnt2++;
         }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    cout<<max({cnt1,cnt0,cnt2})<<endl;
+
 }
 
 // ==========================================================================
@@ -185,7 +191,7 @@ void solve() {
 
 int main() {
     fastio();
-    //ll t=1;
+   // ll t=1;
     ll t;
     cin >> t;
     while (t--) {

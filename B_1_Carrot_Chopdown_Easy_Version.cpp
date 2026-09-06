@@ -165,18 +165,29 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 
 void solve() {
-    ll n;
-    cin>>n;
+    ll n,m;
+    cin>>n>>m;
     vector<ll>a(n);
-    ll f=0;
     f(i,0,n){
         cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
+    }
+    sort(all(a));
+    vector<ll>b(max(m,a[n-1])+1,0);
+    for(int i=0;i<n;i++){
+        if(a[i]!=1&&(a[i]%2==0)){
+            b[a[i]/2]++;
         }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    ll ans=n;
+    ll j=0;
+    for(int i=1;i<=m;i++){
+        while(j<n&&i>a[j]){
+            j++;
+        }
+        ll cnt=b[i]+(n-j);
+        ans=max(ans,cnt);
+    }
+    cout<<ans<<endl;
 }
 
 // ==========================================================================

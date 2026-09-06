@@ -163,18 +163,42 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
+ll rec(ll n,ll k, ll idx,ll cnt, ll len,string &a,string &b,ll picked,ll decided) {
+    if(idx==n){
+        return(len*(len+1))/2;
+    }
+    ll c=a[idx]-'a';
+    if(a[idx]==b[idx]||(picked&(1<<c))){
+        return rec(n,k,idx+1,cnt,len+1,a,b,picked,decided);
+    }
+    if(decided&(1<<c)){
+        return(len*(len+1))/2+rec(n,k,idx+1,cnt,0,a,b,picked,decided);
+    }
+    ll take=0,not_take=0;
+    take=(len*(len+1))/2+rec(n,k,idx+1,cnt,0,a,b,picked,decided|(1<<c));
+    if (cnt < k) {
+        not_take=rec(n,k,idx+1,cnt+1,len+1,a,b,picked|(1<<c),decided|(1<<c));
+    }
+    return max(take, not_take);
+}
 
 void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>a(n);
-    f(i,0,n){
-        cin>>a[i];
+    ll n,k;
+    cin>>n>>k;
+    string a,b;
+    cin>>a>>b;
+    set<ll>st;
+    for(int i=0;i<n;i++){
+        if(a[i]!=b[i]){
+            st.insert(a[i]);
+        }
     }
-    
-
-
-
+    if(st.size()<=k){
+        cout<<(n*(n+1))/2<<endl;
+        return;
+    }
+    ll ans=rec(n,k,0,0,0,a,b,0,0);
+    cout<<ans<<endl;
 }
 
 // ==========================================================================
@@ -183,9 +207,9 @@ void solve() {
 
 int main() {
     fastio();
-    ll t=1;
-    //ll t;
-    //cin >> t;
+    //ll t=1;
+    ll t;
+    cin >> t;
     while (t--) {
         solve();
     }

@@ -168,15 +168,23 @@ void solve() {
     ll n;
     cin>>n;
     vector<ll>a(n);
-    ll f=0;
     f(i,0,n){
         cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
-        }
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    map<ll,ll>mp;
+    for(int i=0;i<n;i++){
+        ll idx=31-__builtin_clzll(a[i]);
+        mp[idx]++;
+    }
+    ll maxi=0;
+    for(auto it:mp){
+        maxi=max(maxi,it.second);
+    }
+    cout<<maxi<<endl;
+    
+
+
+
 }
 
 // ==========================================================================

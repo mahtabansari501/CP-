@@ -60,7 +60,7 @@ void fastio() {
 // #endif
 
 // --- Constants ---
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 const ll INF = 1e18;
 const double PI = 3.141592653589793238462;
 
@@ -163,20 +163,34 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-
 void solve() {
     ll n;
-    cin>>n;
-    vector<ll>a(n);
-    ll f=0;
-    f(i,0,n){
-        cin>>a[i];
-        if((100/a[i])==1){
-            f=1;
-        }
+    cin >> n;
+    vll c; 
+    ll power2 = 1;
+    ll max_c = 0;
+    for (int i = 0; power2 <= n; ++i) {
+        ll next_power2 = power2 * 2;
+        ll sz = min(n, next_power2 - 1) - power2 + 1;
+        c.pb(sz);
+        max_c = max(max_c, sz);
+        power2 = next_power2;
     }
-    if(f==1)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    ll ans = 0;
+    ll pow2N = power(2, n);
+    vll current_W(c.size(), 0);
+    for (ll x = 1; x <= max_c; ++x) {
+        ll W_prod = 1;
+        for (size_t i = 0; i < c.size(); ++i) {
+            if (x - 1 <= c[i]) {
+                current_W[i] = mod_add(current_W[i], nCr(c[i], x - 1));
+            }
+            W_prod = mod_mul(W_prod, current_W[i]);
+        }
+        ll term = mod_sub(pow2N, W_prod);
+        ans = mod_add(ans, term);
+    }
+    cout << ans << endl;
 }
 
 // ==========================================================================
@@ -186,6 +200,7 @@ void solve() {
 int main() {
     fastio();
     //ll t=1;
+    precompute_factorials(200005);
     ll t;
     cin >> t;
     while (t--) {
