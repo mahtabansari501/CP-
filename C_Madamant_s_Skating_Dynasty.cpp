@@ -60,7 +60,7 @@ void fastio() {
 // #endif
 
 // --- Constants ---
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 const ll INF = 1e18;
 const double PI = 3.141592653589793238462;
 
@@ -158,67 +158,33 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
-
 void solve() {
     ll n;
     cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
+    vector<ll>a(n);
+    f(i,0,n){
+        cin>>a[i];
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
-        }
+    sort(a.begin(),a.end());
+    ll suff=a[n-1]%MOD;
+    ll sum=0;
+    for(int i=n-2;i>=0;i--){
+        ll cnt=n-i-1;
+        ll cur=mod_sub(suff,mod_mul(cnt,a[i]));
+        cur=mod_mul(cur,modInverse(cnt));
+        sum=mod_add(sum,cur);
+        suff=mod_add(suff,a[i]);
     }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
-            }
-        }
-    }
-    cout<<"YES"<<endl;
-}
+    ll nums=fact[n-1];
+    ll ans=mod_mul(nums,sum);
+    cout<<ans<<endl;
 
+}
 
 // ==========================================================================
 // ============================  MAIN  ======================================
@@ -227,6 +193,7 @@ void solve() {
 int main() {
     fastio();
     //ll t=1;
+    precompute_factorials(200000);
     ll t;
     cin >> t;
     while (t--) {

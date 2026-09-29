@@ -158,67 +158,62 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
 
 void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
-    }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
+    ll n,q;
+    cin>>n>>q;
+    while(q--){
+        ll s,t;
+        cin>>s>>t;
+        if(s==t){
+            cout<<0<<endl;
+            continue;
         }
-    }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
+        if((s&t)==0){
+            cout<<s+t<<endl;
+            continue;
+        }
+        vector<ll>a,b;
+        for(ll i=0;i<=31;i++){
+            if(((1<<i)&s)==0){
+                ll nums1=(1LL<<i);
+                if(nums1<=n&&nums1!=t&&nums1!=s){
+                    a.push_back(nums1);
+                }
             }
         }
+        for(ll i=0;i<=31;i++){
+            if(((1<<i)&t)==0){
+                ll nums1=(1LL<<i);
+                if(nums1<=n&&nums1!=t&&nums1!=s){
+                    b.push_back(nums1);
+                }
+            }
+        }
+        if(a.size()==0||b.size()==0){
+            cout<<-1<<endl;
+        }
+        else {
+            ll ans=LLONG_MAX;
+            for(int i=0;i<a.size();i++){
+                for(int j=0;j<b.size();j++){
+                    if(a[i]==b[j]){
+                        ans=min(ans,s+t+a[i]+b[j]);
+                    }
+                    else if((a[i]&b[j])==0){
+                        ans=min(ans,s+t+(2*(a[i]+b[j])));
+                    }
+                }
+            }
+            cout<<ans<<endl;
+        }
     }
-    cout<<"YES"<<endl;
 }
-
 
 // ==========================================================================
 // ============================  MAIN  ======================================
@@ -226,9 +221,9 @@ void solve() {
 
 int main() {
     fastio();
-    //ll t=1;
-    ll t;
-    cin >> t;
+    ll t=1;
+    //ll t;
+    //cin >> t;
     while (t--) {
         solve();
     }

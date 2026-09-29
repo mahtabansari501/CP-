@@ -158,68 +158,28 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
-
-void solve() {
+void solve(){
     ll n;
     cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
+    vector<ll>a(n);
+    vector<ll>parity(n+1);
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+        parity[a[i]]=i%2;
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
-        }
-    }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
-            }
+    for(int i=n;i>=2;i-=2){
+        if(parity[i]==parity[i-1]){
+            cout<<"NO"<<endl;
+            return;
         }
     }
     cout<<"YES"<<endl;
 }
-
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================

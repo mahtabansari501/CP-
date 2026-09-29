@@ -165,20 +165,13 @@ bool checkbinary(vector<ll>&a,ll k,ll mid){
 // ==========================================================================
 
 void solve() {
-    ll x,y;
-    cin>>x>>y;
-    ll ans=x;
-    ll cnt=2,f=0;
-    while((ans*cnt)<y){
-        if(y%(ans*cnt)!=0){
-            cout<<"YES"<<endl;
-            f=1;
-            break;
-        }
-        cnt++;
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    f(i,0,n){
+        cin>>a[i];
     }
-    if(f==0)cout<<"NO"<<endl;
-
+    
 
 
 
@@ -190,9 +183,9 @@ void solve() {
 
 int main() {
     fastio();
-    //ll t=1;
-    ll t;
-    cin >> t;
+    ll t=1;
+    //ll t;
+    //cin >> t;
     while (t--) {
         solve();
     }

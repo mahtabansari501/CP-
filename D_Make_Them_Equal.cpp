@@ -158,67 +158,39 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
+vector<ll>moves;
+const ll b_max=1e3;
+ll rec(ll n,ll idx,ll cnt,ll k,vector<ll>&b,vector<ll>&c,vector<vector<ll>>&dp){
+    if(idx==n){
+        return 0;
     }
-    state[u]=2;
-    return false;
+    if(dp[idx][cnt]!=-1)return dp[idx][cnt];
+    ll take=0,not_take=0;
+    if((cnt+moves[b[idx]])<=k||(b[idx]==1)){
+        take=c[idx]+rec(n,idx+1,cnt+moves[b[idx]],k,b,c,dp);
+    }
+    not_take=rec(n,idx+1,cnt,k,b,c,dp);
+    return dp[idx][cnt]=max(take,not_take);
 }
-
 void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
+    ll n,k;
+    cin>>n>>k;
+    vector<ll>b(n),c(n);
+    f(i,0,n){
+        cin>>b[i];
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
-        }
+    f(i,0,n){
+        cin>>c[i];
     }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
-            }
-        }
-    }
-    cout<<"YES"<<endl;
+    vector<vector<ll>>dp(n,vector<ll>((12*n)+1,-1));
+    ll ans=rec(n,0,0,k,b,c,dp);
+    cout<<ans<<endl;
 }
-
 
 // ==========================================================================
 // ============================  MAIN  ======================================
@@ -227,6 +199,14 @@ void solve() {
 int main() {
     fastio();
     //ll t=1;
+    moves.resize(b_max+1,INT_MAX);
+    moves[1]=0;
+    for(int i=1;i<=1e3;i++){
+        for(int j=1;j<=i;j++){
+            ll val=i+(i/j);
+            if(val<=b_max)moves[val]=min(moves[val],moves[i]+1);
+        }
+    }
     ll t;
     cin >> t;
     while (t--) {

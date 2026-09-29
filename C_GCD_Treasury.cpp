@@ -158,67 +158,47 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
-
+vector<bool>prime;
 void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
+    ll n,x;
+    cin>>n>>x;
+    vector<ll>a(n);
+    f(i,0,n){
+        cin>>a[i];
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
-        }
-    }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
+    vector<ll>div;
+    for(int i=1;i*i<=x;i++){
+        if(x%i==0){
+            if(i!=1&&prime[i])div.push_back(i);
+            if(((x%(x/i))==0)&&((x/i)!=1)&&prime[x/i]){
+                div.push_back(x/i);
             }
         }
     }
-    cout<<"YES"<<endl;
+    //if(div.size()==0)div.push_back(x);
+    /*
+    for(int i=0;i<div.size();i++){
+        cout<<div[i]<<" ";
+    }
+    cout<<endl;
+    */
+    ll ans=0;
+    for(int i=0;i<div.size();i++){
+        ll sum=0;
+        for(int j=0;j<n;j++){
+            if(gcd(div[i],a[j])>1){
+                sum+=a[j];
+            }
+        }
+        ans=max(ans,sum);
+    }
+    cout<<ans<<endl;
 }
-
 
 // ==========================================================================
 // ============================  MAIN  ======================================
@@ -227,6 +207,9 @@ void solve() {
 int main() {
     fastio();
     //ll t=1;
+    ll nums=3*1e5+1;
+    prime.resize(nums);
+    prime=sieve(nums);
     ll t;
     cin >> t;
     while (t--) {

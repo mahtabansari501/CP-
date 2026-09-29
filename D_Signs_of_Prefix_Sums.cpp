@@ -158,67 +158,69 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
 
 void solve() {
     ll n;
     cin>>n;
-    vector<ll>adj[n+1];
-    vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
-        freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
+    string s;
+    cin>>s;
+    ll f=1;
+    if(s[0]=='0'){
+        f=0;
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
-        }
+    for(int i=0;i<n-1;i++){
+        if(s[i]=='0'&&s[i+1]=='0')f=0;
     }
-    if(f){
-        cout<<"NO"<<endl;
+    if(f==0){
+        cout<<-1<<endl;
         return;
     }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
-            }
-        }
-    }
-    cout<<"YES"<<endl;
+	ll x=0;
+	f=1;
+	for(int i=0;i<s.size();i++){
+		if(s[i]=='+'){
+			if(x<0){
+				f=0;
+				break;
+			}
+			if(x==1)x=2;
+			else x=1;
+		}
+		else if(s[i]=='-'){
+			if(x>0){
+				f=0;
+				break;
+			}
+			if(x==-1)x=-2;
+			else x=-1;
+		}
+		else {
+			if(x==2||x==-2){
+				f=0;
+				break;
+			}
+			x=0;
+		}
+	}
+	if(f){
+		cout<<"1"<<endl;
+		return;
+	}
+	f=1;
+	for(int i=3;i<s.size();i++){
+		if((s[i-3]=='+'&&s[i-2]=='-'&&s[i-1]=='-'&&s[i]=='+')||(s[i-3]=='-'&&s[i-2]=='+'&&s[i-1]=='+'&&s[i]=='-')){
+			f=0;
+			break;
+		}
+	}
+	if(f)cout<<"2"<<endl;
+	else cout<<"3"<<endl;
 }
-
 
 // ==========================================================================
 // ============================  MAIN  ======================================

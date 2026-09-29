@@ -158,68 +158,32 @@ bool isPrimeSimple(int n) {
 bool checkbinary(vector<ll>&a,ll k,ll mid){
 
 }
+
+
 // ==========================================================================
 // ============================  SOLVE  =====================================
 // ==========================================================================
-bool dfs(ll u, ll p, ll current_depth, vector<ll>adj[], vector<ll>& state, vector<ll>& depth) {
-    state[u]=1;   
-    depth[u]=current_depth;  
-    for(int v:adj[u]) {
-        if(v==p)continue; 
-        if(state[v]==0) {
-            if (dfs(v, u, current_depth + 1, adj, state, depth)) {
-                return true;
-            }
-        } 
-        else if (state[v] == 1) { 
-            int cycle_length = depth[u] - depth[v] + 1;
-            if (cycle_length %2!= 0) { 
-                return true;
-            }
-        }
-    }
-    state[u]=2;
-    return false;
-}
-
+vector<ll>a;
+vector<bool>prime;
 void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>adj[n+1];
+    ll n,k;
+    cin>>n>>k;
     vector<ll>freq(n+1,0);
-    ll f=0;
-    for(int i=0;i<n;i++) {
-        ll x,y;
-        cin>>x>>y;
+    for(int i=0;i<n;i++){
+        ll x;
+        cin>>x;
         freq[x]++;
-        freq[y]++;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        if(x==y)f=1;
     }
-    for(int i=1;i<=n;i++) {
-        if (freq[i]>2) {
-            f=1;
+    ll ans=0;
+    for(int i=n;i>k;i--){
+        ll cnt=freq[i];
+        ans+=cnt;
+        if((i/a[i])>k){
+            freq[(i/a[i])]+=(a[i]*cnt);
         }
     }
-    if(f){
-        cout<<"NO"<<endl;
-        return;
-    }
-    vector<ll>state(n+1,0);
-    vector<ll> depth(n+1,0);
-    for (int i=1;i<=n;i++){
-        if (freq[i]>0&&state[i]==0) {
-            if (dfs(i, 0, 1, adj, state, depth)) {
-                cout << "NO" << endl;
-                return;
-            }
-        }
-    }
-    cout<<"YES"<<endl;
+    cout<<ans<<endl;
 }
-
-
 // ==========================================================================
 // ============================  MAIN  ======================================
 // ==========================================================================
@@ -227,6 +191,26 @@ void solve() {
 int main() {
     fastio();
     //ll t=1;
+    ll maxi=(2*1e5)+1;
+    a.resize(maxi,0);
+    prime.resize(maxi,0);
+    prime=sieve(maxi);
+    for(int i=2;i<=maxi;i++){
+        ll maxi1=-1;
+        for(ll j=1;j*j<=i;j++){
+            if(i%j==0){
+                if(prime[j]){
+                    maxi1=max(maxi1,j);
+                }
+                if((i%(i/j))==0){
+                    if(prime[i/j]){
+                        maxi1=max(maxi1,i/j);
+                    }
+                }
+            }
+        }
+        a[i]=maxi1;
+    }
     ll t;
     cin >> t;
     while (t--) {
