@@ -35,18 +35,7 @@ It serves as a place to:
 * Disjoint Set Union
 * Number Theory
 * Combinatorics
-
-## 📂 Repository Structure
-
-```text
-CP/
-│
-├── Codeforces/
-├── CodeChef/
-├── LeetCode/
-└── Templates/
-```
-
+  
 ## 💻 Language
 
 Most of the solutions in this repository are written in **C++**.
