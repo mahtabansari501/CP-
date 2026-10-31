@@ -17,7 +17,6 @@ It serves as a place to:
 
 * **Codeforces** — [mahtabansari911](https://codeforces.com/profile/mahtabansari911)
 * **CodeChef** — [mahtab_501](https://www.codechef.com/users/mahtab_501)
-* **LeetCode** — [mahtab_501](https://leetcode.com/u/mahtab_501/)
 
 ## 📚 Topics
 
